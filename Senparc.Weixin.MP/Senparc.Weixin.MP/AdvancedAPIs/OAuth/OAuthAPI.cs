@@ -47,6 +47,28 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         }
 
         /// <summary>
+        /// 获取验证地址
+        /// </summary>
+        /// <param name="appId"></param>
+        /// <param name="redirectUrl"></param>
+        /// <param name="state"></param>
+        /// <param name="scope"></param>
+        /// <param name="responseType"></param>
+        /// <returns></returns>
+        public static string GetAuthorizeQrcUrl(string appId, string redirectUrl, string state, OAuthScope scope, string responseType = "code")
+        {
+            var url =
+                string.Format("https://open.weixin.qq.com/connect/qrconnect?appid={0}&redirect_uri={1}&response_type={2}&scope={3}&state={4}#wechat_redirect",
+                                appId, redirectUrl.UrlEncode(), responseType, scope, state);
+
+            /* 这一步发送之后，客户会得到授权页面，无论同意或拒绝，都会返回redirectUrl页面。
+             * 如果用户同意授权，页面将跳转至 redirect_uri/?code=CODE&state=STATE。这里的code用于换取access_token（和通用接口的access_token不通用）
+             * 若用户禁止授权，则重定向后不会带上code参数，仅会带上state参数redirect_uri?state=STATE
+             */
+            return url;
+        }
+
+        /// <summary>
         /// 获取AccessToken
         /// </summary>
         /// <param name="appId"></param>
